@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ChatService } from "../../providers/chat.service";
-import { log } from "util";
 
 @Component({
   selector: "app-chat",
@@ -9,12 +8,19 @@ import { log } from "util";
 })
 export class ChatComponent implements OnInit {
   public mensaje: string = "";
+  public element: HTMLElement;
 
   constructor(public chatService: ChatService) {}
 
   ngOnInit() {
-    this.chatService.cargarMensaje().subscribe((mensajes: any[]) => {
-      console.log(mensajes);
+    this.element = document.getElementById("app-mensajes");
+    console.log("chat.component [OK]");
+    
+    this.chatService.cargarMensaje().subscribe(()=> {
+      setTimeout(() => {
+        console.log("tengo que ajustar el scroll");
+        this.element.scrollTop = this.element.scrollHeight;
+      }, 20);
     });
   }
 
@@ -24,6 +30,7 @@ export class ChatComponent implements OnInit {
       return;
     }
 
+    // publico el mensaje en firebase.
     this.chatService
       .publicarMensaje(this.mensaje)
       .then(() => (this.mensaje = ""))

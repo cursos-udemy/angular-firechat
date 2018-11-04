@@ -22,10 +22,15 @@ export class ChatService {
   constructor(private afs: AngularFirestore) {}
 
   public cargarMensaje(): Observable<Mensaje[]> {
-    this.itemsCollection = this.afs.collection<Mensaje>("chats");
+    // recupero los ultimos 5 mensajes
+    this.itemsCollection = this.afs.collection<Mensaje>("chats", ref =>
+      ref.orderBy("fecha", "desc").limit(5)
+    );
+    
+    // map para visualizar mensajes en orden cronologico
     return this.itemsCollection.valueChanges().pipe(
       map((data: Mensaje[]) => {
-        this.chats = data;
+        this.chats = data.reverse();
         return data;
       })
     );
