@@ -51,11 +51,11 @@ export class ChatService {
     );
   }
 
-  public publicarMensaje(texto: string) {
+  public publicarMensaje(mensaje: string) {
     let msg: Mensaje = {
-      uid: "",
-      remitente: "Willy",
-      texto: texto,
+      uid: this.usuario.uid,
+      remitente: this.usuario.nombre,
+      texto: mensaje,
       fecha: new Date().getTime()
     };
     console.log(msg);
@@ -68,7 +68,8 @@ export class ChatService {
 
     if (servicio === "google") {
       this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-    } else if (servicio === "twitter") {
+    } else if (servicio === "github") {
+      this.afAuth.auth.signInWithPopup(new auth.GithubAuthProvider());
     }
   }
 
